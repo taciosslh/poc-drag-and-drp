@@ -40,7 +40,7 @@ function App() {
       width: 150,
       editable: true,
     },
-    ...[0, 1, 2].map((i) => ({
+    ...[0, 1, 2, 3].map((i) => ({
       field: "filial" + i,
       headerName: "Filial " + (i + 1),
       width: 80,
@@ -68,40 +68,6 @@ function App() {
             }
           />
         );
-
-        // return (
-        //   <div
-        //     onDrop={(e) =>
-        // handleDrop(e, {
-        //   rotaIndex: rotas.findIndex((r) => r.id === params.id),
-        //   filialIndex: i,
-        // })
-        //     }
-        //     style={{ minHeight: 100, minWidth: 100 }}
-        //     onDragOver={(e) => e.preventDefault()}
-        //   >
-        //     {params.row.filiais[i] && (
-        //       <span
-        //         draggable={true}
-        //         onDragStart={(e) =>
-        //           handleDragStart(e, {
-        //             filial: params.row.filiais[i],
-        //             source: {
-        //               rotaIndex: rotas.findIndex((r) => r.id === params.id),
-        //               filialIndex: i,
-        //             },
-        //           })
-        // //         }
-        //       >
-        //         {params.row.filiais[i].nome}
-        //         <br />
-        //         <small className="text-muted">
-        //           {params.row.filiais[i].cubagem}
-        //         </small>
-        //       </span>
-        //     )}
-        //   </div>
-        // );
       },
     })),
     {
@@ -135,6 +101,7 @@ function App() {
         { nome: "Filial 142", cubagem: 12 },
         { nome: "Filial 242", cubagem: 22 },
         { nome: "Filial 342", cubagem: 32 },
+        { nome: "Filial 442", cubagem: 32 },
       ],
       totalCubagem: 66,
     },
@@ -145,6 +112,7 @@ function App() {
         { nome: "Filial 148", cubagem: 18 },
         { nome: "Filial 248", cubagem: 28 },
         { nome: "Filial 348", cubagem: 38 },
+        { nome: "Filial 448", cubagem: 38 },
       ],
       totalCubagem: 84,
     },
@@ -155,6 +123,7 @@ function App() {
         { nome: "Filial 240", cubagem: 20 },
         { nome: "Filial 340", cubagem: 30 },
         { nome: "Filial 440", cubagem: 40 },
+        { nome: "Filial 540", cubagem: 40 },
       ],
       totalCubagem: 90,
     },
@@ -165,6 +134,7 @@ function App() {
         { nome: "Filial 144", cubagem: 14 },
         { nome: "Filial 244", cubagem: 24 },
         { nome: "Filial 344", cubagem: 34 },
+        { nome: "Filial 544", cubagem: 34 },
       ],
       totalCubagem: 72,
     },
@@ -193,30 +163,43 @@ function App() {
 
     console.log({ rotaSrc, rotaDest });
 
-    if (rotaDest.filiais.length >= 3 && dest.rotaIndex !== source.rotaIndex) {
+    if (rotaDest.filiais.length >= 4 && dest.rotaIndex !== source.rotaIndex) {
       alert("Rota cheia");
       return;
     }
 
     debugger;
+    // delete rotaSrc.filiais[source.filialIndex]
     rotaSrc.filiais[source.filialIndex] = null;
+    // TODO
+    rotaSrc.filiais = rotaSrc.filiais.filter((f) => f !== null);
+
     rotaSrc.totalCubagem = calcTotalCubagem(rotaSrc.filiais);
 
+
+    let increment = 0;
+
+    // if (dest.filialIndex + 1 === rotaDest.filiais.length) {
+    //   increment = 1;
+    // }
+
     rotaDest.filiais.splice(
-      // dest.filialIndex + 1,
-      dest.filialIndex === 0
-        ? 0
-        : dest.filialIndex + 1 === rotaDest.filiais.length
-        ? dest.filialIndex + 1
-        : dest.filialIndex,
-      //   ? dest.filialIndex + 1
-      //   : dest.filialIndex,
+      // dest.filialIndex + increment,
+      dest.filialIndex,
+      // dest.filialIndex + 1 === rotaDest.filiais.length ? dest.filialIndex + 1 : dest.filialIndex,
+      // // dest.filialIndex + 1,
+      // dest.filialIndex === 0
+      //   ? 0
+      //   : dest.filialIndex + 1,
+      //   // : (dest.filialIndex + 1 === rotaDest.filiais.length ? dest.filialIndex + 1 : dest.filialIndex),
+      // //   ? dest.filialIndex + 1
+      // //   : dest.filialIndex,
       0,
       filial
     );
     rotaDest.totalCubagem = calcTotalCubagem(rotaDest.filiais);
 
-    rotaSrc.filiais = rotaSrc.filiais.filter((f) => f !== null);
+    // rotaSrc.filiais = rotaSrc.filiais.filter((f) => f !== null);
 
     updatedRotas[source.rotaIndex] = rotaSrc;
     updatedRotas[dest.rotaIndex] = rotaDest;
